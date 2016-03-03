@@ -1,11 +1,11 @@
 <?php
 require "conn.php";
-#$name = $_POST["name"];
-#$username = $_POST["username"];
-#$password = $_POST["password"];
-$name = "Dylan";
-$username = "dwfoster";
-$password = "capstone";
+$name = $_POST["name"];
+$username = $_POST["username"];
+$password = $_POST["password"];
+#$name = "Dylan";
+#$username = "dwfoster";
+#$password = "capstone";
 
 $mysql_query = "insert into user_info (name, username, password) values ('$name','$username','$password')";
     if($conn->query($mysql_qry) === TRUE){
