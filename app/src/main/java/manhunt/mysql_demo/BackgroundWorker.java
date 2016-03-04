@@ -25,8 +25,8 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
     @Override
     protected String doInBackground(String... params) {
         String type = params[0];
-        String login_url = "http://152.30.211.37/login.php";
-        String register_url = "http://152.30.211.37/register.php";
+        String login_url = "http://manhuntserverapp.herokuapp.com/login.php";
+        String register_url = "http://manhuntserverapp.herokuapp.com/register.php";
         if(type.equals("login")) {
             try {
                 String username = params[1];
