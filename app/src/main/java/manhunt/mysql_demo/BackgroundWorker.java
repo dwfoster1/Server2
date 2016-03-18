@@ -2,6 +2,7 @@ package manhunt.mysql_demo;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 import java.io.BufferedReader;
@@ -16,6 +17,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import static android.support.v4.app.ActivityCompat.startActivity;
+
 public class BackgroundWorker extends AsyncTask<String,Void,String> {
     Context context;
     AlertDialog alertDialog;
@@ -25,8 +28,8 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
     @Override
     protected String doInBackground(String... params) {
         String type = params[0];
-        String login_url = "http://manhuntserverapp.herokuapp.com/login.php";
-        String register_url = "http://manhuntserverapp.herokuapp.com/register.php";
+        String login_url = "https://manhuntserverapp.herokuapp.com/login.php";
+        String register_url = "https://manhuntserverapp.herokuapp.com/register.php";
         if(type.equals("login")) {
             try {
                 String username = params[1];
@@ -59,6 +62,7 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
                 inputStream.close();
                 httpURLConnection.disconnect();
                 return result;
+
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -66,9 +70,9 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
             }
         } else if(type.equals("register")) {
             try {
-                String name = params[1];
-                String username = params[2];
-                String password = params[3];
+                String name_db = params[1];
+                String username_db = params[2];
+                String password_db = params[3];
 
                 URL url = new URL(register_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
@@ -77,9 +81,9 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
                 httpURLConnection.setDoInput(true);
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                String post_data = URLEncoder.encode("name","UTF-8")+"="+URLEncoder.encode(name,"UTF-8")+"&"
-                        +URLEncoder.encode("username","UTF-8")+"="+URLEncoder.encode(username,"UTF-8")+"&"
-                        +URLEncoder.encode("password","UTF-8")+"="+URLEncoder.encode(password,"UTF-8");
+                String post_data = URLEncoder.encode("name","UTF-8")+"="+URLEncoder.encode(name_db,"UTF-8")+"&"
+                        +URLEncoder.encode("username","UTF-8")+"="+URLEncoder.encode(username_db,"UTF-8")+"&"
+                        +URLEncoder.encode("password","UTF-8")+"="+URLEncoder.encode(password_db,"UTF-8");
 
                 bufferedWriter.write(post_data);
                 bufferedWriter.flush();
@@ -115,8 +119,16 @@ public class BackgroundWorker extends AsyncTask<String,Void,String> {
 
     @Override
     protected void onPostExecute(String result) {
-        alertDialog.setMessage(result);
-        alertDialog.show();
+        //alertDialog.setMessage(result);
+        //alertDialog.show();
+
+        if(result.contains("Login Success")) // msg you get from success like "Login Success"
+        {
+            Intent i = new Intent(context, Lobby.class);
+            context.startActivity(i);
+            alertDialog.setMessage(result);
+            alertDialog.show();
+        }
     }
 
     @Override
